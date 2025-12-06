@@ -34,7 +34,7 @@ describe('HuntPageComponent', () => {
   it('shows the first hint when step is missing', () => {
     const host = fixture.nativeElement as HTMLElement;
     const hint = host.querySelector('.hint-text')?.textContent ?? '';
-    expect(hint).toContain('kerstboom');
+    expect(hint).toContain('wintermagie');
     expect(component.currentStep.id).toBe(1);
   });
 
@@ -66,7 +66,7 @@ describe('HuntPageComponent', () => {
     expect(warning).toContain('overgeslagen');
     const hint = host.querySelector('.hint-text')?.textContent ?? '';
     // expected step should be 2 in this scenario
-    expect(hint).toContain('open haard');
+    expect(hint).toContain('hal');
   });
 
   it('opens puzzle overlay when all letters collected', () => {
