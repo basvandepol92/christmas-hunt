@@ -1,0 +1,16 @@
+<div class="background">
+  <div class="snow" aria-hidden="true">
+    <span
+      class="flake"
+      *ngFor="let flake of snowflakes"
+      [style.left.%]="flake.left"
+      [style.--size.px]="flake.size"
+      [style.--dur.s]="flake.duration"
+      [style.--delay.s]="flake.delay"
+      [style.--drift.px]="flake.drift"
+    ></span>
+  </div>
+  <div class="lights" aria-hidden="true">
+    <span class="light" *ngFor="let light of lights" [style.left.%]="(light * 9) % 100" [style.animationDelay]="(light * 0.4) + 's'"></span>
+  </div>
+</div>

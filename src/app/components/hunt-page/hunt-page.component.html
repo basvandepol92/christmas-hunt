@@ -1,0 +1,86 @@
+<div class="hunt-wrapper">
+  <div class="hunt-card" [@pageFade]="animationKey">
+    <div class="step-chip" [@pulse]="animationKey">Stap {{ currentStep.id }}</div>
+
+    <div class="letter-display" *ngIf="currentStep.letter" [@letterPop]="letterAnimationState">
+      <div class="gift-circle" [class.newly-found]="recentlyFound">
+        <img src="assets/gift.png" alt="Cadeautje gevonden" />
+      </div>
+      <p class="letter-note">Cadeautje gevonden! Letter opgeslagen.</p>
+    </div>
+
+    <div class="hint">
+      <h2>{{ currentStep.letter ? 'Jouw volgende hint' : 'Het avontuur begint' }}</h2>
+      <p class="hint-text">{{ currentStep.nextHint }}</p>
+    </div>
+
+    <p class="info" *ngIf="currentStep.id === 1">Stap 1 heeft nog geen letter. Zoek de volgende QR om te beginnen!</p>
+    <p class="warning" *ngIf="invalidStep">Die QR lijkt niet te kloppen, we hebben je teruggezet naar stap 1.</p>
+    <p class="warning" *ngIf="outOfSequence">
+      Oei! Je hebt een QR overgeslagen. Ga terug naar stap {{ expectedStep }} en gebruik die QR-code om verder te gaan.
+      Hier is nogmaals de juiste hint.
+    </p>
+
+    <div class="actions">
+      <button class="primary" type="button" (click)="toggleProgress()">
+        {{ showProgress ? 'Verberg voortgang' : 'Toon voortgang' }}
+      </button>
+      <button class="ghost" type="button" (click)="toggleProgress()">Letters: {{ foundCount }} / {{ totalLetters }}</button>
+    </div>
+  </div>
+
+  <app-progress-panel
+    *ngIf="showProgress"
+    [foundCount]="foundCount"
+    [letters]="lettersProgress"
+    [totalLetters]="totalLetters"
+  ></app-progress-panel>
+
+  <section class="puzzle-overlay" *ngIf="puzzleOpen">
+    <div class="puzzle-card">
+      <h2>Je hebt alle letters!</h2>
+      <p>Klik op de letters en vorm het juiste woord om de verrassing te onthullen.</p>
+      <div class="letters-row">
+        <button
+          class="letter-chip"
+          type="button"
+          *ngFor="let l of shuffledLetters; let idx = index"
+          [class.used]="selectedIndices.includes(idx)"
+          (click)="onLetterToggle(idx)"
+        >
+          {{ l }}
+        </button>
+      </div>
+      <div class="puzzle-actions">
+        <button class="ghost" type="button" (click)="shuffleLetters()">Hussel letters</button>
+        <button class="ghost" type="button" (click)="clearSolution()">Leeg maken</button>
+        <input
+          type="text"
+          [value]="solutionInput"
+          readonly
+          placeholder="Typ het kerstwoord"
+          aria-label="Typ het woord"
+        />
+        <button class="primary" type="button" (click)="submitSolution()">Bevestig</button>
+      </div>
+      <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+    </div>
+  </section>
+
+  <section class="success-overlay" *ngIf="showSuccess">
+    <div class="confetti" aria-hidden="true">
+      <span
+        *ngFor="let c of confettiPieces"
+        [style.--hue]="c.hue"
+        [style.--left.%]="c.left"
+        [style.--delay.s]="c.delay"
+        [style.--dur.s]="c.duration"
+      ></span>
+    </div>
+    <div class="success-card">
+      <img src="assets/bankzitters.jpg" alt="Bankzitters concert" class="success-img" />
+      <h2>WIJ GAAN SAMEN NAAR HET BANKZITTERS CONCERT IN ANTWERPEN OP 21 MAART</h2>
+    </div>
+  </section>
+</div>
