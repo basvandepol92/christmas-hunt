@@ -58,6 +58,7 @@ export class HuntPageComponent implements OnInit, OnDestroy {
     duration: 2.5 + Math.random() * 1.5
   }));
   selectedIndices: number[] = [];
+  private successAudio?: HTMLAudioElement;
 
   private subscription?: Subscription;
 
@@ -136,10 +137,25 @@ export class HuntPageComponent implements OnInit, OnDestroy {
       this.showSuccess = true;
       this.puzzleOpen = false;
       this.errorMessage = '';
+      this.playSuccessAudio();
     } else {
       this.errorMessage = 'Helaas dit woord is niet goed, probeer opnieuw';
       this.clearSolution(false);
     }
+  }
+
+  private playSuccessAudio(): void {
+    if (typeof Audio === 'undefined') {
+      return;
+    }
+    if (!this.successAudio) {
+      this.successAudio = new Audio('assets/music/bankzitters.mp3');
+      this.successAudio.load();
+    }
+    this.successAudio.currentTime = 0;
+    void this.successAudio.play().catch(() => {
+      // ignore playback issues (e.g., autoplay restrictions)
+    });
   }
 
   private refreshProgress(): void {
